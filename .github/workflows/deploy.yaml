@@ -52,9 +52,22 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Debug Environment Variables
+        run: |
+          echo "CDF_CLUSTER: ${CDF_CLUSTER}"
+          echo "CDF_PROJECT: ${CDF_PROJECT}"
+          echo "IDP_CLIENT_ID: ${IDP_CLIENT_ID}"
+          if [ -z "${IDP_CLIENT_SECRET}" ]; then
+            echo "❌ IDP_CLIENT_SECRET is EMPTY!"
+          else
+            echo "✅ IDP_CLIENT_SECRET is SET!"
+          fi
+
       - name: Verify and Update Toolkit Authorization
         run: yes | cdf auth verify
       - name: Build Toolkit Configurations
         run: cdf build --env=${{ matrix.environment }}
       - name: Deploy Toolkit Configurations
         run: cdf deploy --env=${{ matrix.environment }}
+ 
